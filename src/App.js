@@ -5,6 +5,8 @@ import AuthProvider from './Context/AuthProvider'
 import POC1 from './Material-UI/POC1'
 import Trail from './Components/Trail'
 import Signin from './Components/Signin';
+import Ioa from './Components/Ioa'
+import Video from './Components/Video'
 
 function App() {
   return (
