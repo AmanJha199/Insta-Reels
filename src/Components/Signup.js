@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../Context/AuthProvider';
 import { storage, database } from '../firebase';
+import {useHistory} from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -43,8 +44,10 @@ function Signup() {
     const [name, setName] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
     const [file, setFile] = useState(null);
-    const { signup } = useContext(AuthContext);
+    const { signup, currentUser } = useContext(AuthContext);
+
     //console.log(signup);
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -88,17 +91,20 @@ function Signup() {
                     createdAt: database.getCurrentTimeStamp(),
                     postIds: []
                 });
+                setLoading(false);
                 console.log("User has signed Up");
+                history.push('/');
             }
 
 
-            setLoading(false);
+            
         }
         catch{
             setError('');
             setTimeout(() => {
                 setError('')
             }, 2000)
+            setLoading(false);
         }
     }
     const handleFileSubmit = (e) => {
@@ -108,6 +114,12 @@ function Signup() {
             setFile(file);
         }
     }
+    useEffect(()=>{
+        if(currentUser)
+        {
+          history.push('/')
+        }
+      },[])
 
 
     return (

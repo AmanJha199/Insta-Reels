@@ -7,16 +7,24 @@ import Trail from './Components/Trail'
 import Signin from './Components/Signin';
 import Ioa from './Components/Ioa'
 import Video from './Components/Video'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Feed from './Components/Feed'
+import PrivateRoute from './Components/PrivateRoute'
+
 
 function App() {
   return (
-    <AuthProvider>
-    <Signin></Signin>
-    </AuthProvider>
-    // <POC1></POC1>
-    // <Trail></Trail>
-    // <Signup></Signup>
-    // <Signin></Signin>
+    <Router>
+      <AuthProvider>
+        <Switch>
+          <PrivateRoute exact path='/' component={Feed} />
+          <Route path='/login' component={Signin} />
+          <Route path='/sign-up' component={Signup} />
+        </Switch>
+      </AuthProvider>
+    </Router>
+
+
   );
 }
 

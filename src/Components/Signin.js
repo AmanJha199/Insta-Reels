@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import {useHistory} from 'react-router-dom'
 import { AuthContext } from '../Context/AuthProvider';
 import { storage, database } from '../firebase';
 import Avatar from '@material-ui/core/Avatar';
@@ -44,6 +45,8 @@ function Signin() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
+    const {currentUser} = useContext(AuthContext);
 
     const {login} = useContext(AuthContext);
 
@@ -55,6 +58,8 @@ function Signin() {
         setLoading(true)
         await login(email, password)
         setLoading(false)
+        //when user login then redirect to feed page
+        history.push('/')
         
       } catch {
         setError("Failed to log in")
@@ -63,7 +68,12 @@ function Signin() {
       }
     }
  
-
+    useEffect(()=>{
+        if(currentUser)
+        {
+          history.push('/')
+        }
+      },[])
 
 
     return (
@@ -118,6 +128,7 @@ function Signin() {
                     >
                         Login
           </Button>
+          {error?<h1>{error}</h1>:<></>}
                 </form>
             </div>
         </Container>
