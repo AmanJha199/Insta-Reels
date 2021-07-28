@@ -5,6 +5,7 @@ import {database} from '../firebase'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UploadFile from './UploadFile'
 import './Feed.css';
+import Post from "./Post"
 
 
 function Feed() {
@@ -21,7 +22,14 @@ function Feed() {
         <>
         { userData == null ? <CircularProgress /> : <>
         <Header userData = {userData}/>
-        <UploadFile userData = {userData}></UploadFile>
+        <div style={{height : '1.5vh'}}/>
+        <div className="feed-container">
+            <div className="center">
+            <UploadFile userData = {userData}></UploadFile>
+            <Post userData = {userData}></Post>
+            </div>
+        </div>
+        
         </>
         }
         </>
