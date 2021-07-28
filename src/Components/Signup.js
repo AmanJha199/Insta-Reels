@@ -207,7 +207,7 @@ function Signup() {
                         >
                             Upload File
   <input
-                                type="file" accept='image/*' onChange={handleFileSubmit}
+                                type="file" accept='image/*' style={{display:'none'}}onChange={handleFileSubmit}
                             />
                         </Button>
                         <Grid>
