@@ -26,7 +26,7 @@ function Feed() {
         <div className="feed-container">
             <div className="center">
             <UploadFile userData = {userData}></UploadFile>
-            <Post userData = {userData}></Post>
+            <Post userData = {userData} ></Post>
             </div>
         </div>
         

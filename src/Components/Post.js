@@ -17,9 +17,9 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import Video from './Video';
 import { database } from '../firebase';
 import { unstable_subscribe } from 'scheduler/tracing';
-// import Likes from './Likes';
-// import AddComment from './AddComment';
-// import Comments from './Comments';
+import Likes from './Likes';
+import AddComment from './AddComment';
+import Comments from './Comments';
 const useStyles = makeStyles({
     root: {
         width: '100%',
@@ -68,6 +68,13 @@ const useStyles = makeStyles({
 function Posts({ userData = null }) {
     const classes = useStyles();
     const [posts, setPosts] = useState(null);
+    const [openId, setOpenId] = useState(null);
+  const handleClickOpen = (id) => {
+    setOpenId(id);
+  };
+  const handleClose = () => {
+    setOpenId(null);
+  };
     const callback = entries => {
         entries.forEach(element => {
             console.log(element);
@@ -109,28 +116,73 @@ function Posts({ userData = null }) {
     },[posts])
     return (
         <>
-        <div className='place'>
-        </div>
-        {posts==null?<CircularProgress className={classes.loader} color="secondary" />:
-        <div className='video-container' id='video-container'>
+          <div className='place'>
+          </div>
+          {posts==null?<CircularProgress className={classes.loader} color="secondary" />:
+          <div className='video-container' id='video-container'>
             {
-                posts.map((post)=>(
-                    <React.Fragment key={post.postId}>
-                        <div className='videos'>
-                            <Video source={post.pUrl} id={post.pId}></Video>
-                            <div className='fa' style={{display:'flex'}}>
-                                <Avatar src={post.uProfile}></Avatar>
-                                <h4>{post.uName}</h4>
+              posts.map((post)=>(
+                <React.Fragment key={post.postId}>
+                  <div className='videos'>
+                    <Video source={post.pUrl} id={post.pId}/>
+                    <div className='fa' style={{display:'flex'}}>
+                      <Avatar src={post.uProfile}></Avatar>
+                      <h4>{post.uName}</h4>
+                    </div>
+                    <Likes userData={userData} postData={post}/>
+                    <ChatBubbleIcon onClick={() => handleClickOpen(post.pId)} className={`${classes.ci} icon-styling`} />
+                        <Dialog maxWidth="md" onClose={handleClose} aria-labelledby="customized-dialog-title" open={openId === post.pId}>
+                          <MuiDialogContent>
+                            <div className='dcontainer'>
+                              <div className='video-part'>
+                                <video  autoPlay={true} className='video-styles2' controls id={post.id} muted="muted" type="video/mp4" >
+                                  <source src={post.pUrl} type="video/webm" />
+                                </video>
+                              </div>
+                              <div className='info-part'>
+                                <Card>
+                                  <CardHeader
+                                    avatar={
+                                      <Avatar src={post.uProfile} aria-label="recipe" className={classes.avatar}>
+                                      </Avatar>
+                                    }
+                                    action={
+                                      <IconButton aria-label="settings">
+                                        <MoreVertIcon />
+                                      </IconButton>
+                                    }
+                                    title={post.uName}
+  
+                                  />
+                                  
+                                  <hr style={{ border: "none", height: "1px", color: "#dfe6e9", backgroundColor: "#dfe6e9" }} />
+                                  <CardContent className={classes.seeComments}>
+                                    
+                                  <Comments userData={userData} postData={post} />
+                                  </CardContent>
+                                  
+                                </Card>
+                                <div className='extra'>
+                                <div className='likes'>
+                                  <Typography className={classes.typo} variant='body2'>Liked By {post.likes.length == 0 ? 'nobody' : ` others`}</Typography>
+                                  </div>
+                                  <AddComment  userData={userData} postData={post}/> 
+                                  </div>
+                              </div>
                             </div>
-                        </div>
-                        <div className='place'></div>
-                    </React.Fragment>
-                ))
+                          </MuiDialogContent>
+                        </Dialog>
+                  </div>
+  
+                  <div className='place'></div>
+                </React.Fragment>
+              ))
             }
-        </div>
-        }
-        </>
-    )
+  
+          </div>
+          }
+          </>
+      )
 }
 
 export default Posts
